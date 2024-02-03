@@ -1,2 +1,2 @@
 # Goblin Code
-## Missouri Hacks 2024 Competition
+### Missouri Hacks 2024 Competition
