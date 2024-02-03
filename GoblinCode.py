@@ -1,7 +1,6 @@
 import pygame
 import random
 
-# pygame setup
 pygame.init() # initialize all of pygame
 
 pygame.display.set_caption("Goblin Code") # set the window title
@@ -20,17 +19,18 @@ bullet_cooldown = 0  # Time since the last bullet was shot
 bullet_cooldown_max = 0.5  # 0.5 seconds cooldown between bullets
 
 enemies = []  # List to store enemies
-enemy_spawn_timer = 0
-enemy_spawn_interval = 1.7  # Spawn an enemy every 3 seconds
+enemy_spawn_timer = 0 # Time since the last enemy was spawned
+enemy_spawn_interval = 1.7  # Spawn an enemy every 1.7 seconds
 
 git_commits = []  # List to store git commits
-git_commit_spawn_timer = 0
+git_commit_spawn_timer = 0 # Time since the last git commit was spawned
 git_commit_spawn_interval = 30  # Spawn a git commit every 30 seconds
 
 high_score = 0  # Player's high score
 
 # start menu
 def draw_start_menu():
+
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("black")
 
@@ -49,6 +49,7 @@ def draw_start_menu():
 
 # game over screen
 def draw_game_over_screen():
+
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("black")
 
@@ -72,15 +73,16 @@ def draw_game_over_screen():
 
 while running:
 
-    # poll for events
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
+    # start menu
     if game_state == "start_menu":
         draw_start_menu()
 
+        # check for the enter key to start the game
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RETURN]:
             player_x = 200
@@ -90,11 +92,12 @@ while running:
             score = 0 # Set the score to 0
 
             game_state = "game"
-            game_over = False 
     
+    # run game over screen
     elif game_state == "game_over":
         draw_game_over_screen()
 
+        # check for the r key to restart the game or the q key to quit
         keys = pygame.key.get_pressed()
         if keys[pygame.K_r]:
             game_state = "start_menu"
@@ -107,14 +110,14 @@ while running:
         # fill the screen with black to wipe away anything from last frame
         screen.fill("black")
 
-        # draw the ground as the image './floor.png'
+        # draw the ground as the image './floor_<option>.png'
         floor = pygame.image.load('./floor_2.png')
         floor = pygame.transform.scale(floor, (screen.get_width(), 190))
         screen.blit(floor, (0, screen.get_height() - 190))
 
         # display the lives as X's
         lives_text = pygame.font.Font('./SourceCodePro.ttf', 17).render(f'{"X " * lives}', False, (255, 0, 0))
-        screen.blit(lives_text, (85, 589))  # Position the lives
+        screen.blit(lives_text, (85, 589))  # Position the lives count
 
         # display the current score
         score_text = pygame.font.Font('./SourceCodePro.ttf', 17).render(f'{score}', False, (0, 0, 255))
@@ -162,9 +165,6 @@ while running:
             player_y -= 5
         if keys[pygame.K_s]:
             player_y += 5
-
-        # draw the screen
-        pygame.display.update()
         
         #############
         ## BULLETS ##
@@ -175,7 +175,7 @@ while running:
 
         # shoot a text bullet with the space bar
         # the bullet moves continously to the right until it goes off screen
-        if keys[pygame.K_SPACE] and bullet_cooldown <= 0:   
+        if keys[pygame.K_SPACE] and bullet_cooldown <= 0:
         
             # Create a new bullet at the player's position
             new_bullet = {
@@ -250,6 +250,7 @@ while running:
                 "speed": enemy_speed,  # Speed at which the enemy moves
                 "text": enemy_text # The text to display 
             }
+
             enemies.append(new_enemy) # Add the new enemy to the enemies list
             enemy_spawn_timer = enemy_spawn_interval # Reset the spawn timer
             
@@ -343,6 +344,9 @@ while running:
         if score > high_score:
             high_score = score
 
+    # draw the screen
+    pygame.display.update()
+    
     pygame.display.flip()
 
     # limits FPS to 60
