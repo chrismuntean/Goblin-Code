@@ -23,6 +23,10 @@ enemies = []  # List to store enemies
 enemy_spawn_timer = 0
 enemy_spawn_interval = 1.7  # Spawn an enemy every 3 seconds
 
+git_commits = []  # List to store git commits
+git_commit_spawn_timer = 0
+git_commit_spawn_interval = 30  # Spawn a git commit every 30 seconds
+
 high_score = 0  # Player's high score
 
 # start menu
@@ -104,7 +108,7 @@ while running:
         screen.fill("black")
 
         # draw the ground as the image './floor.png'
-        floor = pygame.image.load('./floor.png')
+        floor = pygame.image.load('./floor_2.png')
         floor = pygame.transform.scale(floor, (screen.get_width(), 190))
         screen.blit(floor, (0, screen.get_height() - 190))
 
@@ -113,11 +117,11 @@ while running:
         screen.blit(lives_text, (85, 589))  # Position the lives
 
         # display the current score
-        score_text = pygame.font.Font('./SourceCodePro.ttf', 17).render(f'{score}', False, (0, 255, 0))
-        screen.blit(score_text, (160, 630))  # Position the current score
+        score_text = pygame.font.Font('./SourceCodePro.ttf', 17).render(f'{score}', False, (0, 0, 255))
+        screen.blit(score_text, (160, 631))  # Position the current score
 
         # display the high score
-        high_score_text = pygame.font.Font('./SourceCodePro.ttf', 17).render(f'{high_score}', False, (255, 0, 255))
+        high_score_text = pygame.font.Font('./SourceCodePro.ttf', 17).render(f'{high_score}', False, (0, 0, 0))
         screen.blit(high_score_text, (132, 652))  # Position the high score
 
         ############
@@ -229,7 +233,6 @@ while running:
                 "Import ERR",
                 "Attribute ERR",
                 "Assertion ERR",
-                "EOF ERR",
                 "Floating Point ERR",
                 "Zero Division ERR",
                 "Keyboard Interrupt",
@@ -275,6 +278,45 @@ while running:
                 break  # Exit the loop to avoid modifying the list during iteration
 
         enemies = [enemy for enemy in enemies if enemy["x"] + enemy_width > 0]  # Remove enemies that have gone off screen
+
+        #################
+        ## Git Commits ##
+        #################
+
+        # Handle git commit spawning
+        git_commit_spawn_timer -= dt
+        if git_commit_spawn_timer <= 0:
+            new_git_commit = {
+                "x": screen.get_width(),  # Start at the right edge of the screen
+                "y": random.randint(50, screen.get_height() - 220),  # Random height
+                "speed": 5  # Speed at which the git commit moves
+            }
+            git_commits.append(new_git_commit)
+            git_commit_spawn_timer = git_commit_spawn_interval
+
+        # Draw the git commits and check for collision with the player
+        for git_commit in git_commits:
+            git_commit["x"] -= git_commit["speed"]
+        
+            git_commit_font = pygame.font.Font('./SourceCodePro.ttf', 30)  # Define the font
+            git_commit_text = git_commit_font.render('Git Commit', False, (0, 255, 0))  # git commit text
+            git_commit_width, git_commit_height = git_commit_font.size('git commit')  # Get the size of the text
+            screen.blit(git_commit_text, (git_commit["x"], git_commit["y"]))  # Draw the git commit
+
+            # Create a rectangle for the git commit
+            git_commit_rect = pygame.Rect(git_commit["x"], git_commit["y"], git_commit_width, git_commit_height)
+
+            # Check for collision with the player
+            if player_rect.colliderect(git_commit_rect):
+                # Collision detected, remove git commit
+                git_commits.remove(git_commit)
+
+                # Increase lives
+                lives += 1
+                break
+
+        git_commits = [git_commit for git_commit in git_commits if git_commit["x"] + git_commit_width > 0]  # Remove git commits that have gone off screen
+
 
         ###################################
         ## ENEMY DEATH && SCORE INCREASE ##
