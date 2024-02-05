@@ -1,5 +1,5 @@
 # Goblin Code
-### My project for the Missouri Hacks 2024 Competition
+### My project for the Missouri Hacks 2024 Competition at Mizzou
 Welcome to **Goblin Code**, my unique creation for the [Missouri Hacks](https://github.com/user/repo/blob/branch/other_file.md) 2024 High School Competition. This competition was an intense experience, where I was challenged to develop a unique and complex program within a mere 4-hour window. My focus was on delivering a product that not only stood out from the rest but also illustrated clarity and maintainability through effectively commented code.
 
 Proudly, Goblin Code emerged as a bug-free and fully functional application, achieving its intended goals with precision. The competition was fierce with 32 skilled participants, and it's an honor to share that Goblin Code was recognized with one of the two Creativity Awards, along with a prize of $25.
